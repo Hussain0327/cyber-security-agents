@@ -93,7 +93,7 @@ async def analyze_security_event(
 @app.get("/scenarios")
 async def list_scenarios(user_id: str = Depends(get_current_user)):
     from ..scenarios import get_available_scenarios
-    return {"scenarios": get_available_scenarios()}
+    return {"scenarios": await get_available_scenarios()}
 
 
 @app.post("/scenarios/{scenario_name}/run")

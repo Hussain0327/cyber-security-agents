@@ -42,6 +42,20 @@ class SecurityGraph:
         self.mitre_mapper = MITREMapper()
         self.graph = self._build_graph()
 
+    def _enrich_parsed_data(self, parsed_data: Any, request: AnalysisRequest) -> Dict[str, Any]:
+        if isinstance(parsed_data, dict):
+            enriched = dict(parsed_data)
+            enriched.setdefault("_raw_input", request.data)
+            if request.context:
+                enriched.setdefault("_context", request.context)
+            return enriched
+
+        return {
+            "value": parsed_data,
+            "_raw_input": request.data,
+            "_context": request.context or {},
+        }
+
     def _build_graph(self) -> StateGraph:
         workflow = StateGraph(AgentState)
 
@@ -103,6 +117,7 @@ class SecurityGraph:
             else:
                 parsed_data = request.data
 
+            parsed_data = self._enrich_parsed_data(parsed_data, request)
             state["parsed_data"] = parsed_data
             state["messages"].append(
                 AIMessage(content=f"Data parsed successfully: {len(parsed_data)} fields")
@@ -110,7 +125,7 @@ class SecurityGraph:
 
         except Exception as e:
             logger.error(f"Data parsing failed: {str(e)}")
-            state["parsed_data"] = request.data
+            state["parsed_data"] = self._enrich_parsed_data(request.data, request)
             state["messages"].append(
                 AIMessage(content=f"Data parsing failed, using raw data: {str(e)}")
             )

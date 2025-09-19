@@ -1,5 +1,6 @@
 import re
 import json
+import math
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 import hashlib
@@ -356,17 +357,17 @@ class FileParser:
 
     def _calculate_entropy(self, data: bytes) -> float:
         if not data:
-            return 0
+            return 0.0
 
         byte_counts = [0] * 256
         for byte in data:
             byte_counts[byte] += 1
 
-        entropy = 0
+        entropy = 0.0
         length = len(data)
         for count in byte_counts:
-            if count > 0:
+            if count:
                 probability = count / length
-                entropy -= probability * (probability.bit_length() - 1)
+                entropy -= probability * math.log2(probability)
 
         return entropy
