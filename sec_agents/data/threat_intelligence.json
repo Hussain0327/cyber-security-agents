@@ -1,0 +1,146 @@
+{
+  "malicious_ips": [
+    {
+      "ip": "185.243.112.89",
+      "first_seen": "2024-01-10T00:00:00Z",
+      "last_seen": "2024-01-15T12:00:00Z",
+      "threat_types": ["C2", "Malware Download"],
+      "confidence": 0.95,
+      "source": "ThreatIntel Feed",
+      "associated_campaigns": ["APT-2024-001"],
+      "geolocation": {"country": "Unknown", "city": "Unknown"}
+    },
+    {
+      "ip": "203.0.113.50",
+      "first_seen": "2024-01-12T00:00:00Z",
+      "last_seen": "2024-01-15T10:30:00Z",
+      "threat_types": ["Scanning", "Brute Force"],
+      "confidence": 0.85,
+      "source": "Honeypot Network",
+      "associated_campaigns": ["BruteForce-2024-003"],
+      "geolocation": {"country": "Russia", "city": "Moscow"}
+    }
+  ],
+  "malicious_domains": [
+    {
+      "domain": "malware-c2-server.darknet.com",
+      "first_seen": "2024-01-08T00:00:00Z",
+      "last_seen": "2024-01-15T11:00:00Z",
+      "threat_types": ["C2", "Data Exfiltration"],
+      "confidence": 0.98,
+      "source": "DGA Detection",
+      "associated_ips": ["185.243.112.89"],
+      "registrar": "Suspicious Registrar Inc",
+      "creation_date": "2024-01-07T00:00:00Z"
+    },
+    {
+      "domain": "fake-company.com",
+      "first_seen": "2024-01-14T00:00:00Z",
+      "last_seen": "2024-01-15T09:45:00Z",
+      "threat_types": ["Phishing", "Business Email Compromise"],
+      "confidence": 0.90,
+      "source": "Phishing Detection",
+      "associated_ips": ["198.51.100.25"],
+      "registrar": "Quick Domain Services",
+      "creation_date": "2024-01-13T00:00:00Z"
+    }
+  ],
+  "malicious_hashes": [
+    {
+      "hash": "a1b2c3d4e5f6789012345678901234567890abcdef",
+      "hash_type": "MD5",
+      "first_seen": "2024-01-14T00:00:00Z",
+      "last_seen": "2024-01-15T09:45:00Z",
+      "malware_family": "EmailTrojan",
+      "threat_types": ["Trojan", "Credential Stealer"],
+      "confidence": 0.92,
+      "source": "Malware Analysis Lab",
+      "file_names": ["invoice_2024.zip", "urgent_payment.zip"],
+      "file_size": 2048,
+      "signatures": ["Win32.Trojan.Generic"]
+    },
+    {
+      "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "hash_type": "SHA256",
+      "first_seen": "2024-01-15T10:33:00Z",
+      "last_seen": "2024-01-15T10:33:00Z",
+      "malware_family": "GenericDownloader",
+      "threat_types": ["Downloader", "Backdoor"],
+      "confidence": 0.88,
+      "source": "EDR Detection",
+      "file_names": ["payload.exe", "update.exe"],
+      "file_size": 4096,
+      "signatures": ["Generic.Trojan.Downloader"]
+    }
+  ],
+  "attack_patterns": [
+    {
+      "pattern_id": "PATTERN-001",
+      "name": "PowerShell Encoded Command Execution",
+      "description": "Detection of PowerShell executing encoded commands, often used to bypass security controls",
+      "mitre_techniques": ["T1059.001", "T1027"],
+      "indicators": [
+        "powershell.exe with -EncodedCommand parameter",
+        "Base64 encoded PowerShell commands",
+        "Execution Policy Bypass"
+      ],
+      "confidence": 0.90,
+      "severity": "High"
+    },
+    {
+      "pattern_id": "PATTERN-002",
+      "name": "Lateral Movement via RDP",
+      "description": "Suspicious RDP connections between internal systems indicating lateral movement",
+      "mitre_techniques": ["T1021.001", "T1078"],
+      "indicators": [
+        "RDP connections from non-admin workstations",
+        "Multiple RDP sessions from single source",
+        "RDP to server systems from user workstations"
+      ],
+      "confidence": 0.85,
+      "severity": "Medium"
+    },
+    {
+      "pattern_id": "PATTERN-003",
+      "name": "Credential Dumping Activity",
+      "description": "Tools and techniques used to extract credentials from memory or registry",
+      "mitre_techniques": ["T1003.001", "T1003.002"],
+      "indicators": [
+        "Access to LSASS process memory",
+        "Registry SAM hive access",
+        "Known credential dumping tools"
+      ],
+      "confidence": 0.95,
+      "severity": "Critical"
+    }
+  ],
+  "yara_rules": [
+    {
+      "rule_name": "EmailTrojan_Variant",
+      "rule_content": "rule EmailTrojan_Variant {\n    meta:\n        description = \"Detects EmailTrojan malware variant\"\n        author = \"Security Team\"\n        date = \"2024-01-15\"\n    strings:\n        $s1 = \"invoice\" nocase\n        $s2 = \"urgent\" nocase\n        $s3 = \"payment\" nocase\n        $hex1 = { 4D 5A 90 00 03 00 00 00 }\n    condition:\n        ($s1 and $s2 and $s3) or $hex1\n}",
+      "threat_types": ["Trojan", "Email"],
+      "confidence": 0.88,
+      "last_updated": "2024-01-15T00:00:00Z"
+    }
+  ],
+  "campaign_data": [
+    {
+      "campaign_id": "APT-2024-001",
+      "name": "Operation DarkNet",
+      "description": "Sophisticated APT campaign targeting financial institutions",
+      "threat_actor": "Unknown APT Group",
+      "first_seen": "2024-01-01T00:00:00Z",
+      "last_activity": "2024-01-15T12:00:00Z",
+      "target_sectors": ["Financial", "Government"],
+      "target_countries": ["US", "EU", "UK"],
+      "ttps": [
+        "Spear phishing emails",
+        "PowerShell-based payloads",
+        "Living off the land techniques",
+        "C2 over HTTPS"
+      ],
+      "mitre_techniques": ["T1566.001", "T1059.001", "T1071.001", "T1105"],
+      "confidence": 0.85
+    }
+  ]
+}

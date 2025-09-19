@@ -1,0 +1,152 @@
+name: "Ransomware Incident Response Scenario"
+description: "Respond to a suspected ransomware attack with network isolation and forensic analysis"
+author: "Incident Response Team"
+version: "1.0"
+category: "incident_response"
+
+metadata:
+  difficulty: "high"
+  estimated_time: "15-20 minutes"
+  mitre_tactics: ["initial_access", "execution", "persistence", "defense_evasion", "impact"]
+  tags: ["ransomware", "network_analysis", "file_encryption", "c2_communication"]
+
+steps:
+  - name: "initial_compromise_analysis"
+    description: "Analyze the initial compromise vector"
+    analysis_type: "incident_response"
+    input_data:
+      network_traffic:
+        - timestamp: "2024-01-15T10:30:00Z"
+          src_ip: "192.168.1.45"
+          dst_ip: "185.243.112.89"
+          dst_port: 443
+          protocol: "HTTPS"
+          bytes_transferred: 2048576
+          duration: 45
+        - timestamp: "2024-01-15T10:30:45Z"
+          src_ip: "192.168.1.45"
+          dst_ip: "185.243.112.89"
+          dst_port: 443
+          protocol: "HTTPS"
+          bytes_transferred: 524288
+          duration: 12
+      dns_queries:
+        - timestamp: "2024-01-15T10:29:55Z"
+          query: "malware-c2-server.darknet.com"
+          response: "185.243.112.89"
+          query_type: "A"
+      email_logs:
+        - timestamp: "2024-01-15T10:15:00Z"
+          sender: "finance@fake-company.com"
+          recipient: "employee@company.com"
+          subject: "Urgent Invoice Payment Required"
+          attachment: "invoice_2024.zip"
+          attachment_hash: "a1b2c3d4e5f6789012345678901234567890abcdef"
+    context:
+      affected_host: "FINANCE-WS-01"
+      user: "finance_user"
+      timeline_start: "2024-01-15T10:15:00Z"
+    expected_output:
+      threat_level: "critical"
+      findings_count: 3
+      mitre_techniques: ["T1566.001", "T1071.001", "T1105"]
+      recommendations: ["isolate_host", "block_c2_domain", "analyze_email_attachment"]
+
+  - name: "lateral_movement_detection"
+    description: "Detect lateral movement across the network"
+    analysis_type: "incident_response"
+    input_data:
+      connections:
+        - src_ip: "192.168.1.45"
+          dst_ip: "192.168.1.50"
+          dst_port: 445
+          protocol: "SMB"
+          status: "established"
+          timestamp: "2024-01-15T10:45:00Z"
+        - src_ip: "192.168.1.45"
+          dst_ip: "192.168.1.55"
+          dst_port: 3389
+          protocol: "RDP"
+          status: "established"
+          timestamp: "2024-01-15T10:47:00Z"
+        - src_ip: "192.168.1.45"
+          dst_ip: "192.168.1.60"
+          dst_port: 135
+          protocol: "RPC"
+          status: "established"
+          timestamp: "2024-01-15T10:50:00Z"
+      authentication_events:
+        - timestamp: "2024-01-15T10:46:00Z"
+          event_type: "logon"
+          src_ip: "192.168.1.45"
+          dst_host: "HR-WS-02"
+          user: "admin_service"
+          logon_type: 3
+          status: "success"
+        - timestamp: "2024-01-15T10:52:00Z"
+          event_type: "logon"
+          src_ip: "192.168.1.45"
+          dst_host: "SALES-WS-03"
+          user: "admin_service"
+          logon_type: 3
+          status: "success"
+    context:
+      network_segment: "corporate_lan"
+      monitoring_period: "30_minutes"
+    expected_output:
+      threat_level: "critical"
+      findings_count: 2
+      mitre_techniques: ["T1021.001", "T1021.002", "T1078"]
+      recommendations: ["isolate_compromised_hosts", "disable_admin_accounts", "monitor_privileged_access"]
+
+  - name: "file_encryption_analysis"
+    description: "Analyze file encryption activities indicating ransomware deployment"
+    analysis_type: "incident_response"
+    input_data:
+      file_events:
+        - timestamp: "2024-01-15T11:00:00Z"
+          action: "create"
+          file_path: "C:\\Users\\finance_user\\Documents\\important_data.txt.encrypted"
+          process: "malware.exe"
+          file_size: 2048
+        - timestamp: "2024-01-15T11:00:05Z"
+          action: "delete"
+          file_path: "C:\\Users\\finance_user\\Documents\\important_data.txt"
+          process: "malware.exe"
+        - timestamp: "2024-01-15T11:00:10Z"
+          action: "create"
+          file_path: "C:\\Users\\finance_user\\Documents\\README_DECRYPT.txt"
+          process: "malware.exe"
+          file_size: 1024
+        - timestamp: "2024-01-15T11:01:00Z"
+          action: "create"
+          file_path: "C:\\Shared\\Projects\\project_files.zip.locked"
+          process: "malware.exe"
+          file_size: 5242880
+      registry_events:
+        - timestamp: "2024-01-15T11:00:30Z"
+          action: "set"
+          key: "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\SystemUpdate"
+          value: "C:\\Temp\\malware.exe -persist"
+          process: "malware.exe"
+      ransom_note_content: |
+        YOUR FILES HAVE BEEN ENCRYPTED!
+
+        All your important files have been encrypted with military-grade encryption.
+        The only way to recover your files is to purchase our decryption software.
+
+        Contact us at: recovery@darkweb-email.onion
+        Your unique ID: 1234567890ABCDEF
+
+        Bitcoin payment address: 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2
+        Payment amount: 0.5 BTC
+
+        You have 72 hours to make the payment or the decryption key will be deleted forever.
+    context:
+      affected_systems: ["FINANCE-WS-01", "HR-WS-02", "SALES-WS-03"]
+      encryption_start: "2024-01-15T11:00:00Z"
+    expected_output:
+      threat_level: "critical"
+      findings_count: 4
+      mitre_techniques: ["T1486", "T1547.001", "T1490"]
+      recommendations: ["activate_incident_response", "isolate_all_systems", "contact_law_enforcement", "restore_from_backups"]

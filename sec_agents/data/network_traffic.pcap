@@ -1,0 +1,33 @@
+# This is a placeholder for actual PCAP data
+# In a real implementation, this would be binary PCAP data
+# For demonstration purposes, we'll create a text representation
+
+PCAP File Summary:
+- Total Packets: 1,247
+- Capture Duration: 300 seconds
+- Protocols: TCP (85%), UDP (12%), ICMP (3%)
+
+Sample Traffic Analysis:
+1. Suspicious HTTPS connection to 185.243.112.89:443
+   - Source: 10.10.10.55:49152
+   - Duration: 45 seconds
+   - Bytes: 2,048,576 (unusual for typical web traffic)
+   - TLS Certificate: Self-signed, suspicious CN
+
+2. RDP Traffic Pattern:
+   - Multiple connections from 10.10.10.55 to internal IPs
+   - Destinations: 10.10.10.100:3389, 10.10.10.105:3389
+   - Pattern suggests lateral movement
+
+3. DNS Queries:
+   - Query for malware-c2-server.darknet.com
+   - Response: 185.243.112.89
+   - TTL: 300 seconds (short for C2 infrastructure)
+
+4. SMB Traffic:
+   - Attempted connection to 10.10.10.100:445
+   - Failed authentication attempts (5 occurrences)
+   - Source: 10.10.10.55
+
+Note: This is synthetic data for demonstration.
+In production, use actual PCAP files with tools like tshark or pyshark for analysis.
