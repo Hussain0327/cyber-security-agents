@@ -11,6 +11,8 @@ from .scenarios import run_scenario, get_available_scenarios
 from .core.graph import SecurityGraph
 from .core.models import AnalysisRequest, AnalysisType, get_provider
 from .app.auth import generate_demo_token
+from .sdk import SWEClient
+from .core.memory import get_memory_store
 
 
 @click.group()
@@ -284,6 +286,136 @@ def config(config_file):
         click.echo("Current configuration:")
         click.echo(f"Provider: {click.get_current_context().obj.get('provider', 'openai')}")
         click.echo(f"Verbose: {click.get_current_context().obj.get('verbose', False)}")
+
+
+# SWE Multi-Agent Orchestrator Commands
+
+
+@cli.group()
+def swe():
+    """SWE Multi-Agent Orchestrator commands"""
+    pass
+
+
+@swe.command(name='run')
+@click.argument('task')
+@click.option('--session-id', default='default-session', help='Session ID for continuity')
+@click.option('--output', '-o', type=click.Path(), help='Output file path')
+@click.option('--format', 'output_format', type=click.Choice(['json', 'markdown']), default='markdown', help='Output format')
+@click.pass_context
+def swe_run(ctx, task, session_id, output, output_format):
+    """Execute a software engineering task"""
+    async def _run_swe():
+        try:
+            click.echo(f"Executing SWE task: {task[:100]}...")
+            click.echo(f"Session ID: {session_id}")
+            click.echo(f"Provider: {ctx.obj['provider']}\n")
+
+            # Create SWE client
+            client = SWEClient(
+                provider=ctx.obj['provider'],
+                session_id=session_id
+            )
+
+            # Execute task
+            result = await client.execute(task)
+
+            # Format output
+            if output_format == 'markdown':
+                output_text = result.report
+            else:
+                output_text = json.dumps({
+                    "request_id": result.request_id,
+                    "session_id": result.session_id,
+                    "task": result.task,
+                    "status": result.status,
+                    "report": result.report,
+                    "iterations_used": result.iterations_used,
+                    "execution_time_seconds": result.execution_time_seconds,
+                    "agent_invocations": [
+                        {
+                            "agent_role": inv.agent_role,
+                            "timestamp": inv.timestamp
+                        }
+                        for inv in result.agent_invocations
+                    ]
+                }, indent=2, default=str)
+
+            # Output or save
+            if output:
+                with open(output, 'w') as f:
+                    f.write(output_text)
+                click.echo(f"\nResults saved to: {output}")
+            else:
+                click.echo("\n" + "="*80)
+                click.echo(output_text)
+                click.echo("="*80)
+
+            # Show summary
+            click.echo(f"\nTask completed in {result.execution_time_seconds:.2f}s")
+            click.echo(f"Agents invoked: {len(result.agent_invocations)}")
+            click.echo(f"Status: {result.status}")
+
+        except Exception as e:
+            click.echo(f"Error executing SWE task: {str(e)}", err=True)
+
+    asyncio.run(_run_swe())
+
+
+@swe.command(name='session')
+@click.argument('session_id')
+@click.option('--clear', is_flag=True, help='Clear the session')
+def swe_session(session_id, clear):
+    """Manage SWE sessions"""
+    try:
+        memory_store = get_memory_store()
+
+        if clear:
+            cleared = memory_store.clear_session(session_id)
+            if cleared:
+                click.echo(f"Session {session_id} cleared successfully")
+            else:
+                click.echo(f"Session {session_id} not found")
+        else:
+            # Show session info
+            try:
+                info = memory_store.get_session_info(session_id)
+                messages = memory_store.get_messages(session_id, limit=10)
+
+                click.echo(f"Session: {session_id}")
+                click.echo(f"Created: {info['created_at']}")
+                click.echo(f"Updated: {info['updated_at']}")
+                click.echo(f"Total messages: {info['message_count']}")
+                click.echo(f"\nRecent messages ({len(messages)}):")
+                for i, msg in enumerate(messages[-5:], 1):
+                    click.echo(f"  {i}. [{msg['role']}]: {msg['content'][:60]}...")
+
+            except Exception:
+                click.echo(f"Session {session_id} not found")
+
+    except Exception as e:
+        click.echo(f"Error managing session: {str(e)}", err=True)
+
+
+@swe.command(name='sessions')
+def swe_list_sessions():
+    """List all active SWE sessions"""
+    try:
+        memory_store = get_memory_store()
+        sessions = memory_store.list_sessions()
+
+        if sessions:
+            click.echo(f"Active sessions ({len(sessions)}):")
+            for session_id in sessions:
+                info = memory_store.get_session_info(session_id)
+                click.echo(f"  - {session_id}")
+                click.echo(f"    Created: {info['created_at']}")
+                click.echo(f"    Messages: {info['message_count']}")
+        else:
+            click.echo("No active sessions")
+
+    except Exception as e:
+        click.echo(f"Error listing sessions: {str(e)}", err=True)
 
 
 def main():
