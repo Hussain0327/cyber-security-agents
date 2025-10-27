@@ -1,5 +1,4 @@
-# Cybersecurity Agents & SWE Orchestrator
-
+# SWE Security Orchestrator
 A unified platform for two things:
 
 1. Security analysis (log triage, incident response support, threat mapping).
