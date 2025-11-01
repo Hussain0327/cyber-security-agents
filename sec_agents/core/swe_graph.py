@@ -173,7 +173,6 @@ class SWEOrchestrator:
             )
 
     def _get_planner_system_prompt(self) -> str:
-        """Get the system prompt for the orchestrator/planner."""
         return """You are the Orchestrator of a multi-agent software engineering system. Your mission is to coordinate specialized AI agents to complete end-to-end SWE workflows with precision and reliability.
 
 # Available Specialized Agents:

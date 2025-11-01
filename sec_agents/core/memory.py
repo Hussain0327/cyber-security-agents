@@ -114,7 +114,6 @@ _memory_store: Optional[SessionMemoryStore] = None
 
 
 def get_memory_store() -> SessionMemoryStore:
-    """Get or create the global SessionMemoryStore instance."""
     global _memory_store
     if _memory_store is None:
         _memory_store = SessionMemoryStore()
