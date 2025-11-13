@@ -18,10 +18,10 @@ class_name = "SWEOrchestrator"
 script_name = "swe-security-orchestrator"
 
 # Durable Object Migrations
-# Creates the SWEOrchestrator class on first deployment
+# Creates the SWEOrchestrator class on first deployment (SQLite for free plan)
 [[migrations]]
 tag = "v1"
-new_classes = ["SWEOrchestrator"]
+new_sqlite_classes = ["SWEOrchestrator"]
 
 # Development Configuration
 [dev]
