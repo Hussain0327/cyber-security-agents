@@ -2,8 +2,8 @@ export class SWEOrchestrator {
   constructor(state, env) {
     this.state = state;
     this.env = env;
-    // Using Llama 3.1 70B - largest available model on Workers AI
-    this.model = "@cf/meta/llama-3.1-70b-instruct";
+    // Using Llama 3 8B Instruct - verified available on Workers AI
+    this.model = "@cf/meta/llama-3-8b-instruct";
   }
 
   async fetch(request) {

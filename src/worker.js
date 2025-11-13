@@ -27,7 +27,7 @@ export default {
           status: 'healthy',
           service: 'SWE Security Orchestrator',
           version: '1.0.0',
-          model: '@cf/meta/llama-3.1-70b-instruct'
+          model: '@cf/meta/llama-3-8b-instruct'
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
@@ -93,7 +93,7 @@ function getHTML() {
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #0a0a0a;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -102,9 +102,10 @@ function getHTML() {
     }
 
     .container {
-      background: white;
+      background: #1a1a1a;
       border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      border: 1px solid #333;
       width: 100%;
       max-width: 900px;
       height: 700px;
@@ -114,7 +115,8 @@ function getHTML() {
     }
 
     .header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #000;
+      border-bottom: 2px solid #fff;
       color: white;
       padding: 24px;
       text-align: center;
@@ -134,7 +136,7 @@ function getHTML() {
       flex: 1;
       padding: 20px;
       overflow-y: auto;
-      background: #f7f9fc;
+      background: #1a1a1a;
     }
 
     .message {
@@ -166,14 +168,15 @@ function getHTML() {
     }
 
     .message.user .message-content {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background: #fff;
+      color: #000;
+      border: 2px solid #000;
     }
 
     .message.assistant .message-content {
-      background: white;
-      color: #333;
-      border: 1px solid #e0e0e0;
+      background: #000;
+      color: #fff;
+      border: 2px solid #fff;
       text-align: left;
     }
 
@@ -182,16 +185,17 @@ function getHTML() {
     }
 
     .message.system .message-content {
-      background: #e3f2fd;
-      color: #1976d2;
+      background: #333;
+      color: #fff;
+      border: 1px solid #666;
       font-size: 12px;
       padding: 8px 12px;
     }
 
     .input-area {
       padding: 20px;
-      background: white;
-      border-top: 1px solid #e0e0e0;
+      background: #000;
+      border-top: 2px solid #fff;
     }
 
     .input-container {
@@ -202,22 +206,25 @@ function getHTML() {
     #userInput {
       flex: 1;
       padding: 12px 16px;
-      border: 2px solid #e0e0e0;
+      border: 2px solid #fff;
       border-radius: 24px;
       font-size: 14px;
       outline: none;
+      background: #1a1a1a;
+      color: #fff;
       transition: border-color 0.3s;
     }
 
     #userInput:focus {
-      border-color: #667eea;
+      border-color: #fff;
+      background: #000;
     }
 
     #sendBtn {
       padding: 12px 32px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
+      background: #fff;
+      color: #000;
+      border: 2px solid #000;
       border-radius: 24px;
       font-size: 14px;
       font-weight: 600;
@@ -227,7 +234,10 @@ function getHTML() {
 
     #sendBtn:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
+      background: #000;
+      color: #fff;
+      border-color: #fff;
     }
 
     #sendBtn:disabled {
@@ -239,8 +249,8 @@ function getHTML() {
       display: inline-block;
       width: 12px;
       height: 12px;
-      border: 2px solid #f3f3f3;
-      border-top: 2px solid #667eea;
+      border: 2px solid #333;
+      border-top: 2px solid #fff;
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -253,11 +263,12 @@ function getHTML() {
     .stats {
       margin-top: 8px;
       font-size: 11px;
-      color: #666;
+      color: #999;
     }
 
     pre {
-      background: #f5f5f5;
+      background: #000;
+      border: 1px solid #fff;
       padding: 12px;
       border-radius: 8px;
       overflow-x: auto;
@@ -267,6 +278,7 @@ function getHTML() {
     code {
       font-family: 'Courier New', monospace;
       font-size: 13px;
+      color: #fff;
     }
   </style>
 </head>
@@ -274,7 +286,7 @@ function getHTML() {
   <div class="container">
     <div class="header">
       <h1>🤖 SWE Security Orchestrator</h1>
-      <p>Multi-Agent AI powered by Cloudflare Workers & Llama 3.1</p>
+      <p>Multi-Agent AI powered by Cloudflare Workers & Llama 3</p>
     </div>
 
     <div class="chat-box" id="chatBox">
