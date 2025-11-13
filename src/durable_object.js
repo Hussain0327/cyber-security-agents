@@ -178,40 +178,62 @@ export class SWEOrchestrator {
     }
   }
 
-  
+
   async runAgent(agentType, task, history, context = {}) {
-    const systemPrompt = this.getAgentPrompt(agentType, context);
+    try {
+      const systemPrompt = this.getAgentPrompt(agentType, context);
 
-    // Build the prompt for this agent
-    let userPrompt = `Task: ${task}\n\n`;
+      // Build the prompt for this agent
+      let userPrompt = `Task: ${task}\n\n`;
 
-    if (context.research_findings) {
-      userPrompt += `Research Findings:\n${context.research_findings.substring(0, 1000)}...\n\n`;
+      if (context.research_findings) {
+        userPrompt += `Research Findings:\n${context.research_findings.substring(0, 1000)}...\n\n`;
+      }
+      if (context.code_implementation) {
+        userPrompt += `Implementation:\n${context.code_implementation.substring(0, 1500)}...\n\n`;
+      }
+      if (context.debug_report) {
+        userPrompt += `Debug Report:\n${context.debug_report.substring(0, 1000)}...\n\n`;
+      }
+      if (context.review_report) {
+        userPrompt += `Review Report:\n${context.review_report.substring(0, 1000)}...\n\n`;
+      }
+
+      // Prepare messages for the AI
+      const messages = [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ];
+
+      console.log(`Running ${agentType} agent with model ${this.model}`);
+
+      // Call Workers AI with Llama 3
+      const response = await this.env.AI.run(this.model, {
+        messages: messages,
+        max_tokens: this.getMaxTokens(agentType),
+        temperature: this.getTemperature(agentType)
+      });
+
+      console.log(`${agentType} response type:`, typeof response);
+      console.log(`${agentType} response keys:`, Object.keys(response || {}));
+
+      // Extract response - handle different response formats
+      if (typeof response === 'string') {
+        return response;
+      }
+
+      const result = response.response || response.result || response.output || "";
+
+      if (!result) {
+        console.error(`${agentType} agent returned empty response:`, JSON.stringify(response));
+        return `${agentType} agent completed but returned no output. Response structure: ${JSON.stringify(response)}`;
+      }
+
+      return result;
+    } catch (error) {
+      console.error(`Error in ${agentType} agent:`, error);
+      return `Error in ${agentType} agent: ${error.message}`;
     }
-    if (context.code_implementation) {
-      userPrompt += `Implementation:\n${context.code_implementation.substring(0, 1500)}...\n\n`;
-    }
-    if (context.debug_report) {
-      userPrompt += `Debug Report:\n${context.debug_report.substring(0, 1000)}...\n\n`;
-    }
-    if (context.review_report) {
-      userPrompt += `Review Report:\n${context.review_report.substring(0, 1000)}...\n\n`;
-    }
-
-    // Prepare messages for the AI
-    const messages = [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: userPrompt }
-    ];
-
-    // Call Workers AI with Llama 3.1
-    const response = await this.env.AI.run(this.model, {
-      messages: messages,
-      max_tokens: this.getMaxTokens(agentType),
-      temperature: this.getTemperature(agentType)
-    });
-
-    return response.response || "";
   }
 
   
