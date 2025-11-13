@@ -1,14 +1,3 @@
-/**
- * SWE Orchestrator Durable Object
- *
- * Manages multi-agent software engineering workflows with 5 specialized agents:
- * 1. Research Agent - Gathers verified technical information
- * 2. Developer Agent - Writes production-ready code
- * 3. Debugger Agent - Tests and debugs implementations
- * 4. Reviewer Agent - Quality assurance and validation
- * 5. Reporter Agent - Compiles comprehensive technical reports
- */
-
 export class SWEOrchestrator {
   constructor(state, env) {
     this.state = state;
@@ -85,10 +74,7 @@ export class SWEOrchestrator {
     return Response.json({ message: "History cleared" });
   }
 
-  /**
-   * Execute the 5-agent workflow
-   * Research → Develop → Debug → Review → Report
-   */
+   
   async executeWorkflow(task, history) {
     const startTime = Date.now();
     const invocations = [];
@@ -192,9 +178,7 @@ export class SWEOrchestrator {
     }
   }
 
-  /**
-   * Run a specific agent with its specialized system prompt
-   */
+  
   async runAgent(agentType, task, history, context = {}) {
     const systemPrompt = this.getAgentPrompt(agentType, context);
 
@@ -230,9 +214,7 @@ export class SWEOrchestrator {
     return response.response || "";
   }
 
-  /**
-   * Get agent-specific system prompt
-   */
+  
   getAgentPrompt(agentType, context) {
     const prompts = {
       research: `You are the Research Agent - a specialized AI focused on gathering accurate, verified technical information.

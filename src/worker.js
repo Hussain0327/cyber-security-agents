@@ -1,11 +1,4 @@
-/**
- * SWE Security Orchestrator - Main Worker
- *
- * Entry point for the Cloudflare Workers AI-powered
- * multi-agent software engineering system.
- *
- * Routes requests to Durable Objects for stateful conversation management.
- */
+
 
 import { SWEOrchestrator } from './durable_object.js';
 
