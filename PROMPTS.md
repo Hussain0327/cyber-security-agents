@@ -4,7 +4,7 @@ This document contains all AI prompts used in the SWE Security Orchestrator syst
 
 ## Overview
 
-The orchestrator uses **Cloudflare Workers AI** with the **Llama 3.3 70B Instruct** model (`@cf/meta/llama-3.3-70b-instruct`).
+The orchestrator uses **Cloudflare Workers AI** with the **Llama 3.1 70B Instruct** model (`@cf/meta/llama-3.1-70b-instruct`).
 
 **Workflow**: Research → Developer → Debugger → Reviewer → Reporter
 
@@ -399,11 +399,11 @@ User Output
 ## Model Information
 
 **Provider**: Cloudflare Workers AI
-**Model**: `@cf/meta/llama-3.3-70b-instruct`
+**Model**: `@cf/meta/llama-3.1-70b-instruct`
 **Context Window**: 128K tokens
 **Specialization**: Instruction-following, code generation, reasoning
 
-### Why Llama 3.3 70B?
+### Why Llama 3.1 70B?
 
 - Strong reasoning capabilities for multi-step workflows
 - Excellent code generation quality

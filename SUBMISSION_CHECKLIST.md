@@ -93,7 +93,7 @@ Live Demo URL: https://<YOUR_WORKER>.workers.dev
 
 Technologies:
 - Cloudflare Workers
-- Workers AI (Llama 3.3 70B)
+- Workers AI (Llama 3.1 70B)
 - Durable Objects
 - JavaScript
 
@@ -105,7 +105,7 @@ Key Features:
 - Comprehensive technical reports
 
 Description:
-A production-ready multi-agent orchestrator that coordinates 5 specialized AI agents to complete end-to-end software engineering tasks. Powered by Cloudflare Workers AI (Llama 3.3), it handles research, implementation, debugging, review, and reporting in a single unified workflow.
+A production-ready multi-agent orchestrator that coordinates 5 specialized AI agents to complete end-to-end software engineering tasks. Powered by Cloudflare Workers AI (Llama 3.1), it handles research, implementation, debugging, review, and reporting in a single unified workflow.
 ```
 
 - [ ] Information gathered
@@ -155,7 +155,7 @@ A production-ready multi-agent orchestrator that coordinates 5 specialized AI ag
   📝 Multi-agent AI system with 5 specialized agents
   🔗 Demo: [your-url]
   💻 Code: [github-url]
-  🤖 Powered by Workers AI (Llama 3.3)
+  🤖 Powered by Workers AI (Llama 3.1)
   ```
 
 **Option C: Cloudflare Community**

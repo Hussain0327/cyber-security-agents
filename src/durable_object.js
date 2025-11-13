@@ -13,7 +13,8 @@ export class SWEOrchestrator {
   constructor(state, env) {
     this.state = state;
     this.env = env;
-    this.model = "@cf/meta/llama-3.3-70b-instruct";
+    // Using Llama 3.1 70B - largest available model on Workers AI
+    this.model = "@cf/meta/llama-3.1-70b-instruct";
   }
 
   async fetch(request) {
@@ -219,7 +220,7 @@ export class SWEOrchestrator {
       { role: "user", content: userPrompt }
     ];
 
-    // Call Workers AI with Llama 3.3
+    // Call Workers AI with Llama 3.1
     const response = await this.env.AI.run(this.model, {
       messages: messages,
       max_tokens: this.getMaxTokens(agentType),

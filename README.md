@@ -1,11 +1,11 @@
 # 🤖 SWE Security Orchestrator
 
-A multi-agent AI system for software engineering tasks, powered by **Cloudflare Workers AI** and **Llama 3.3 70B Instruct**. This orchestrator coordinates 5 specialized agents to complete end-to-end development workflows with research, implementation, debugging, review, and reporting.
+A multi-agent AI system for software engineering tasks, powered by **Cloudflare Workers AI** and **Llama 3.1 70B Instruct**. This orchestrator coordinates 5 specialized agents to complete end-to-end development workflows with research, implementation, debugging, review, and reporting.
 
 ## 🌟 Features
 
 - **5 Specialized AI Agents**: Research, Developer, Debugger, Reviewer, Reporter
-- **Cloudflare Workers AI**: Runs on Llama 3.3 70B Instruct model
+- **Cloudflare Workers AI**: Runs on Llama 3.1 70B Instruct model
 - **Durable Objects**: Stateful conversation management with session persistence
 - **Built-in Web UI**: Simple chat interface for interacting with agents
 - **Production-Ready**: Deployed on Cloudflare's global edge network
@@ -323,7 +323,7 @@ Cloudflare Workers AI pricing (as of 2024):
 | Component | Free Tier | Paid |
 |-----------|-----------|------|
 | Workers Requests | 100,000/day | $0.50/million |
-| Workers AI (Llama 3.3) | 10,000 neurons/day | $0.011/1000 neurons |
+| Workers AI (Llama 3.1) | 10,000 neurons/day | $0.011/1000 neurons |
 | Durable Objects | 1M reads/writes | $0.20/million |
 
 **Estimated cost per task**: $0.001 - $0.003
@@ -379,7 +379,7 @@ testWorkflow();
 - **PROMPTS.md**: Detailed documentation of all AI prompts used
 - **Cloudflare Workers Docs**: https://developers.cloudflare.com/workers/
 - **Workers AI Docs**: https://developers.cloudflare.com/workers-ai/
-- **Llama 3.3 Model Card**: https://ai.meta.com/llama/
+- **Llama 3.1 Model Card**: https://ai.meta.com/llama/
 
 ## 🤝 Contributing
 
@@ -400,7 +400,7 @@ MIT License - See LICENSE file for details
 
 - Based on the original [SWE Security Orchestrator](../README.md) Python implementation
 - Inspired by n8n multi-agent workflows
-- Powered by Cloudflare Workers AI and Llama 3.3
+- Powered by Cloudflare Workers AI and Llama 3.1
 
 ---
 

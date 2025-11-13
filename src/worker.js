@@ -34,7 +34,7 @@ export default {
           status: 'healthy',
           service: 'SWE Security Orchestrator',
           version: '1.0.0',
-          model: '@cf/meta/llama-3.3-70b-instruct'
+          model: '@cf/meta/llama-3.1-70b-instruct'
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
@@ -281,7 +281,7 @@ function getHTML() {
   <div class="container">
     <div class="header">
       <h1>🤖 SWE Security Orchestrator</h1>
-      <p>Multi-Agent AI powered by Cloudflare Workers & Llama 3.3</p>
+      <p>Multi-Agent AI powered by Cloudflare Workers & Llama 3.1</p>
     </div>
 
     <div class="chat-box" id="chatBox">

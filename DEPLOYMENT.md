@@ -99,7 +99,7 @@ git push -u origin main
 
 **Recommended Description:**
 ```
-Multi-agent AI system for software engineering tasks powered by Cloudflare Workers AI and Llama 3.3. Coordinates 5 specialized agents (Research, Developer, Debugger, Reviewer, Reporter) to complete end-to-end development workflows.
+Multi-agent AI system for software engineering tasks powered by Cloudflare Workers AI and Llama 3.1. Coordinates 5 specialized agents (Research, Developer, Debugger, Reviewer, Reporter) to complete end-to-end development workflows.
 ```
 
 **Topics to add:**
@@ -137,14 +137,14 @@ https://github.com/YOUR_USERNAME/YOUR_REPO
 
 ## Key Features
 - 5 specialized AI agents working in sequence
-- Powered by Cloudflare Workers AI (Llama 3.3 70B)
+- Powered by Cloudflare Workers AI (Llama 3.1 70B)
 - Stateful conversation management via Durable Objects
 - Built-in web UI for easy interaction
 - Comprehensive technical reports with code, tests, and documentation
 
 ## Technologies Used
 - Cloudflare Workers
-- Workers AI (@cf/meta/llama-3.3-70b-instruct)
+- Workers AI (@cf/meta/llama-3.1-70b-instruct)
 - Durable Objects
 - Vanilla JavaScript (no build step)
 
