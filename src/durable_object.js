@@ -2,7 +2,6 @@ export class SWEOrchestrator {
   constructor(state, env) {
     this.state = state;
     this.env = env;
-    // Using Llama 3 8B Instruct - verified available on Workers AI
     this.model = "@cf/meta/llama-3-8b-instruct";
   }
 
