@@ -1,0 +1,46 @@
+# Cloudflare Workers Configuration
+# SWE Security Orchestrator - Multi-Agent AI System
+
+name = "swe-security-orchestrator"
+main = "src/worker.js"
+compatibility_date = "2024-01-01"
+
+# Workers AI Binding
+# Provides access to Cloudflare's AI models
+[ai]
+binding = "AI"
+
+# Durable Objects Configuration
+# Used for stateful conversation management
+[[durable_objects.bindings]]
+name = "SWE_ORCHESTRATOR"
+class_name = "SWEOrchestrator"
+script_name = "swe-security-orchestrator"
+
+# Durable Object Migrations
+# Creates the SWEOrchestrator class on first deployment
+[[migrations]]
+tag = "v1"
+new_classes = ["SWEOrchestrator"]
+
+# Development Configuration
+[dev]
+ip = "0.0.0.0"
+port = 8787
+local_protocol = "http"
+
+# Build Configuration
+# No build step needed - vanilla JavaScript
+[build]
+command = ""
+
+# Environment Variables (optional)
+# Uncomment and set if needed
+# [vars]
+# API_KEY = "your-secret-key"
+# MAX_TOKENS = "4000"
+# DEFAULT_TEMPERATURE = "0.7"
+
+# Production Limits (adjust as needed)
+# [limits]
+# cpu_ms = 30000  # 30 seconds max CPU time per request
