@@ -35,7 +35,7 @@ export class SWEOrchestrator {
       // Add user message
       history.push({ role: "user", content: userInput });
 
-      // Execute the 5-agent workflow
+      
       const workflowResult = await this.executeWorkflow(userInput, history);
 
       // Add assistant response
@@ -216,7 +216,6 @@ export class SWEOrchestrator {
       console.log(`${agentType} response type:`, typeof response);
       console.log(`${agentType} response keys:`, Object.keys(response || {}));
 
-      // Extract response - handle different response formats
       if (typeof response === 'string') {
         return response;
       }
