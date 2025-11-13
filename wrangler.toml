@@ -1,7 +1,7 @@
 # Cloudflare Workers Configuration
 # SWE Security Orchestrator - Multi-Agent AI System
 
-name = "swe-security-orchestrator"
+name = "swe"
 main = "src/worker.js"
 compatibility_date = "2024-01-01"
 
