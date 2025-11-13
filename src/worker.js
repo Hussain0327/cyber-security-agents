@@ -74,9 +74,7 @@ export default {
   },
 };
 
-/**
- * Simple embedded HTML UI
- */
+
 function getHTML() {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -104,8 +102,8 @@ function getHTML() {
     .container {
       background: #1a1a1a;
       border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-      border: 1px solid #333;
+      box-shadow: 0 20px 60px rgba(255, 142, 142, 0.8);
+      border: 1px solid #c55454ff;
       width: 100%;
       max-width: 900px;
       height: 700px;
@@ -115,7 +113,7 @@ function getHTML() {
     }
 
     .header {
-      background: #000;
+      background: #b33c3cff;
       border-bottom: 2px solid #fff;
       color: white;
       padding: 24px;
